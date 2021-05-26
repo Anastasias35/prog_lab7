@@ -1,5 +1,6 @@
 package Server.commands;
 
+import Client.util.User;
 import Common.data.Worker;
 import Common.exceptions.IncorrectArgumentException;
 import Server.utilitka.StringResponse;
@@ -21,7 +22,7 @@ public class HelpCommand extends AbstractCommand{
      * @return состояние выполнения команды
      */
     @Override
-      public boolean execute(String arguments, Worker worker){
+      public boolean execute(String arguments, Worker worker, User user){
           try{
               if(!arguments.isEmpty()) throw new IncorrectArgumentException();
               return  true;

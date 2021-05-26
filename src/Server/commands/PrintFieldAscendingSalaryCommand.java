@@ -1,5 +1,6 @@
 package Server.commands;
 
+import Client.util.User;
 import Common.data.Worker;
 import Common.exceptions.EmptyCollection;
 import Common.exceptions.IncorrectArgumentException;
@@ -26,7 +27,7 @@ public class PrintFieldAscendingSalaryCommand extends AbstractCommand {
      * @return состояние выполнение команды
      */
     @Override
-    public boolean execute(String argument, Worker worker){
+    public boolean execute(String argument, Worker worker, User user){
         try{
             if(collectionManager.sizeCollection()==0) throw new EmptyCollection();
             if(!argument.isEmpty()) throw new IncorrectArgumentException();

@@ -1,10 +1,7 @@
 package Server;
 
 import Server.commands.*;
-import Server.utilitka.CollectionManager;
-import Server.utilitka.CommandManager;
-import Server.utilitka.FileManager;
-import Server.utilitka.ProcessingOfRequest;
+import Server.utilitka.*;
 
 import java.util.Scanner;
 
@@ -16,6 +13,8 @@ public class Main {
         } catch (ArrayIndexOutOfBoundsException exception) {
             System.out.println("Вы не ввели имя файла в аргументе командной строки");
         } finally {
+            DataBaseHandler dataBaseHandler=new DataBaseHandler();
+            DataBaseUserManager dataBaseUserManager=new DataBaseUserManager(dataBaseHandler);
             FileManager fileManager = new FileManager(fileName);
             CollectionManager collectionManager = new CollectionManager(fileManager);
            CommandManager commandManager=new CommandManager( new HelpCommand(),
@@ -23,7 +22,6 @@ public class Main {
                     new ExitCommand(collectionManager),
                     new ShowCommand(collectionManager),
                     new ClearCommand(collectionManager),
-                    new SaveCommand(collectionManager),
                     new AddCommand(collectionManager),
                     new RemoveByIdCommand(collectionManager),
                     new PrintFieldAscendingSalaryCommand(collectionManager),
@@ -33,8 +31,9 @@ public class Main {
                     new AddIfMinCommand(collectionManager),
                     new RemoveLowerCommand(collectionManager),
                     new PrintDescendingCommand(collectionManager),
-                    new ExecuteScriptCommand());
-
+                    new ExecuteScriptCommand(),
+                    new LoginCommand(dataBaseUserManager),
+                    new RegistrationCommand(dataBaseUserManager));
 
             ProcessingOfRequest processingOfRequest=new ProcessingOfRequest(commandManager);
             Server server = new Server(1616,processingOfRequest);

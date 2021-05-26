@@ -1,5 +1,6 @@
 package Server.commands;
 
+import Client.util.User;
 import Common.data.Position;
 import Common.data.Worker;
 import Common.exceptions.EmptyCollection;
@@ -31,7 +32,7 @@ public class CountLessThanPositionCommand extends AbstractCommand{
      * @return состояние выполнения команды
      */
     @Override
-    public boolean execute(String argument, Worker worker) {
+    public boolean execute(String argument, Worker worker, User user) {
         Position argument1 = null;
         boolean checkposition=false;
         try{

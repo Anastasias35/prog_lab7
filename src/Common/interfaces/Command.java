@@ -1,5 +1,6 @@
 package Common.interfaces;
 
+import Client.util.User;
 import Common.data.Worker;
 
 /**
@@ -8,5 +9,5 @@ import Common.data.Worker;
 public interface Command {
     String getName();
     String getDescription();
-    boolean execute(String argument, Worker worker);
+    boolean execute(String argument, Worker worker, User user);
 }

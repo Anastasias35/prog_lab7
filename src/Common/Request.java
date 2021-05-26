@@ -1,5 +1,6 @@
 package Common;
 
+import Client.util.User;
 import Common.data.Worker;
 import Server.commands.AbstractCommand;
 
@@ -11,6 +12,20 @@ public class Request  implements Serializable {
     private String command;
     private String argument;
     private Worker worker;
+    private User user;
+
+    public Request(String command, String argument, Worker worker, User user){
+        this.command=command;
+        this.argument=argument;
+        this.worker=worker;
+        this.user=user;
+    }
+
+    public Request(String command,String argument,User user){
+        this.command=command;
+        this.argument=argument;
+        this.user=user;
+    }
 
     public Request(String command,String argument, Worker worker) {
         this.command=command;
@@ -46,4 +61,8 @@ public class Request  implements Serializable {
         return worker;
     }
 
+
+    public User getUser() {
+        return user;
+    }
 }
