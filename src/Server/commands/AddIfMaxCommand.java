@@ -5,8 +5,10 @@ import Common.data.Worker;
 import Common.exceptions.EmptyCollection;
 import Common.exceptions.IncorrectArgumentException;
 import Server.utilitka.CollectionManager;
+import Server.utilitka.DataBaseCollectionManager;
 import Server.utilitka.StringResponse;
 
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.Date;
 
@@ -18,12 +20,14 @@ public class AddIfMaxCommand extends AbstractCommand{
     private String name;
     private String description;
     private CollectionManager collectionManager;
+    private DataBaseCollectionManager dataBaseCollectionManager;
 
     private RemoveByIdCommand removeByIdCommand;
 
-    public AddIfMaxCommand(CollectionManager collectionManager){
+    public AddIfMaxCommand(CollectionManager collectionManager, DataBaseCollectionManager dataBaseCollectionManager){
         super("add_if_max {element}", "добавить новый элемент в коллекцию, если его значение превышает значение наибольшего элемента этой коллекции");
         this.collectionManager=collectionManager;
+        this.dataBaseCollectionManager=dataBaseCollectionManager;
     }
 
     /**
@@ -38,15 +42,21 @@ public class AddIfMaxCommand extends AbstractCommand{
             if(!argument.isEmpty()) throw new IncorrectArgumentException();
             if(collectionManager.maxCoordinates(worker)){
                 collectionManager.addToCollection(worker);
-                StringResponse.appendln("Worker добавлен в коллекцию");
+                dataBaseCollectionManager.addWorker(worker,user);
+                StringResponse.appendln("Worker добавлен в базу данных");
+
+
             }
             return true;
         }catch (IncorrectArgumentException exception){
             StringResponse.appendError("Команда "+ getName() +" не должна иметь аргументы");
-            return false;
+            //return false;
         }catch (EmptyCollection exception){
             StringResponse.appendError("Коллекция пуста");
-            return false;
+           // return false;
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
+        return false;
     }
 }

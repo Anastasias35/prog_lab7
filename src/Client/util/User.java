@@ -1,8 +1,9 @@
 package Client.util;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class User {
+public class User implements Serializable {
     private String login;
     private String password;
     private Long userId;

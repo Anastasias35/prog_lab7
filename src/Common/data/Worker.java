@@ -1,4 +1,5 @@
 package Common.data;
+import Client.util.User;
 import Common.data.Coordinates;
 import Common.data.Person;
 import Common.data.Position;
@@ -14,17 +15,18 @@ import java.util.Objects;
  */
 public class Worker  implements Comparable<Worker>, Serializable {
 
-    private Long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
-    private String name;  //Поле не может быть null, Строка не может быть пустой
-    private Coordinates coordinates; //Поле не может быть null
-    private Date creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
-    private Long salary; //Поле может быть null, Значение поля должно быть больше 0
-    private LocalDateTime startDate; //Поле не может быть null
-    private ZonedDateTime endDate; //Поле может быть null
-    private Position position; //Поле может быть null
-    private Person person; //Поле может быть null
+    private Long id;
+    private String name;
+    private Coordinates coordinates;
+    private Date creationDate;
+    private Long salary;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private Position position;
+    private Person person;
+    private User user;
 
-    public Worker(long id, String name, Coordinates coordinates, Date creationDate,Long salary, LocalDateTime startDate, ZonedDateTime endDate, Position position, Person person){
+    public Worker(long id, String name, Coordinates coordinates, Date creationDate,Long salary, LocalDateTime startDate, LocalDateTime endDate, Position position, Person person, User user){
         this.id=id;
         this.name=name;
         this.coordinates=coordinates;
@@ -34,6 +36,7 @@ public class Worker  implements Comparable<Worker>, Serializable {
         this.endDate=endDate;
         this.position=position;
         this.person=person;
+        this.user=user;
     }
 
     public Worker(){
@@ -87,7 +90,7 @@ public class Worker  implements Comparable<Worker>, Serializable {
     /**
      * @return дата окончания работы работника
      */
-    public ZonedDateTime getEndDate(){
+    public LocalDateTime getEndDate(){
         return endDate;
     }
 
@@ -103,6 +106,10 @@ public class Worker  implements Comparable<Worker>, Serializable {
      */
     public Person getPerson(){
         return person;
+    }
+
+    public User getUser(){
+        return user;
     }
 
     public void setId(Long id){
@@ -125,7 +132,7 @@ public class Worker  implements Comparable<Worker>, Serializable {
         this.startDate=startDate;
     }
 
-    public void setEndDate(ZonedDateTime endDate){
+    public void setEndDate(LocalDateTime endDate){
         this.endDate=endDate;
     }
 
@@ -139,6 +146,10 @@ public class Worker  implements Comparable<Worker>, Serializable {
 
     public void setCreationDate(Date creationDate){
         this.creationDate=creationDate;
+    }
+
+    public void setUser(User user){
+        this.user=user;
     }
 
 

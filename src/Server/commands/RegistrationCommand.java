@@ -30,6 +30,7 @@ public class RegistrationCommand  extends AbstractCommand{
         }catch (UserAlreadyExistException exception){
             StringResponse.appendError("Такой пользователь уже существует");
         }catch (SQLException exception){
+            exception.printStackTrace();
             StringResponse.appendError("Произошла ошибка при обращении к базе данных");
         }
         return false;

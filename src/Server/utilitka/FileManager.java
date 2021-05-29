@@ -89,7 +89,7 @@ public class FileManager {
                              worker.setStartDate(LocalDateTime.parse(reader[5]));
                              break;
                          case 6:
-                             worker.setEndDate(ZonedDateTime.parse(reader[6]));
+                             worker.setEndDate(LocalDateTime.parse(reader[6]));
                              break;
                          case 7:
                              reader[7]=reader[7].toUpperCase();

@@ -28,7 +28,7 @@ public class ExitCommand extends AbstractCommand {
     public boolean execute(String argument, Worker worker, User user){
         try{
             if(!argument.isEmpty()) throw new IncorrectArgumentException();
-            collectionManager.saveCollection();
+           // collectionManager.saveCollection();
             return true;
         }catch (IncorrectArgumentException exception){
             StringResponse.appendError("Команда "+getName() + " не имеет параметров" );

@@ -5,8 +5,10 @@ import Common.data.Worker;
 import Common.exceptions.EmptyCollection;
 import Common.exceptions.IncorrectArgumentException;
 import Server.utilitka.CollectionManager;
+import Server.utilitka.DataBaseCollectionManager;
 import Server.utilitka.StringResponse;
 
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.Date;
 
@@ -20,11 +22,13 @@ public class AddIfMinCommand extends AbstractCommand {
     private String description;
     private CollectionManager collectionManager;
     private RemoveByIdCommand removeByIdCommand;
+    private DataBaseCollectionManager dataBaseCollectionManager;
 
 
-    public AddIfMinCommand(CollectionManager collectionManager){
+    public AddIfMinCommand(CollectionManager collectionManager,DataBaseCollectionManager dataBaseCollectionManager){
         super("add_if_min {element}", "добавить новый элемент в коллекцию, если его значение меньше, чем у наименьшего элемента этой коллекции\n");
         this.collectionManager=collectionManager;
+        this.dataBaseCollectionManager=dataBaseCollectionManager;
     }
 
     /**
@@ -39,6 +43,8 @@ public class AddIfMinCommand extends AbstractCommand {
             if(!argument.isEmpty()) throw new IncorrectArgumentException();
 
             if(collectionManager.minSalary(worker)) {
+                    dataBaseCollectionManager.addWorker(worker,user);
+                    StringResponse.appendln("Worker добавлен в базу данных");
                     collectionManager.addToCollection(worker);
                     //System.out.println("Worker добавлен в коллекцию");
             }
@@ -48,6 +54,9 @@ public class AddIfMinCommand extends AbstractCommand {
             return false;
         }catch (EmptyCollection exception){
             StringResponse.appendError("Коллекция пуста");
+            return false;
+        }catch (SQLException exception){
+            exception.printStackTrace();
             return false;
         }
     }

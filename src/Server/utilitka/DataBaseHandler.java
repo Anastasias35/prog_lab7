@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class DataBaseHandler {
 
-    public static final String USER_TABLE="user";
+    public static final String USER_TABLE="Users";
     public static final String WORKER_TABLE="worker";
     public static final String USER_ID_COLUMN="id";
     public static final String USER_LOGIN_COLUMN="login";
@@ -27,7 +27,7 @@ public class DataBaseHandler {
     public static final String WORKER_USER_ID_COLUMN="userid";
     private final String JDBC_DRIVER = "org.postgresql.Driver";
 
-    private final String url = "jdbc:postgresql://localhost:5432/studs";
+    private final String url = "jdbc:postgresql://localhost:5716/studs";
     private String login;
     private String password;
     private Connection connection;
@@ -44,9 +44,9 @@ public class DataBaseHandler {
             System.out.println("Введите логин:");
             this.login=scanner.nextLine().trim();
             System.out.println("Введите пароль:");
-            this.password=scanner.nextLine().trim();
-            try {
-                Class.forName(JDBC_DRIVER);
+            this.password="sad876";
+            try { ;
+                Class.forName("org.postgresql.Driver");
                 connection= DriverManager.getConnection(url,login,password);
                 System.out.println("Соединение установлено");
                 break;
@@ -66,11 +66,12 @@ public class DataBaseHandler {
             if(connection==null) throw new SQLException();
             int generateKeys=key? Statement.RETURN_GENERATED_KEYS:Statement.NO_GENERATED_KEYS;
             preparedStatement=connection.prepareStatement(request,generateKeys);
+            return preparedStatement;
         }catch(SQLException exception){
             if(connection==null) System.out.println("Соединение не установлено");
             throw  new SQLException();
         }
-        return preparedStatement;
+
     }
 
 }

@@ -218,12 +218,12 @@ public class Creator {
      * Получает дату окончания работы работника
      * @return дата
      */
-    public ZonedDateTime inputEndDate() {
-        ZonedDateTime currentEndDate;
+    public LocalDateTime inputEndDate() {
+        LocalDateTime currentEndDate;
         while (true) {
             try{
                 System.out.println("Введите дату окончания работы");
-                currentEndDate = ZonedDateTime.parse(scanner.nextLine().trim()+ "T00:00:00.000090Z[Etc/UTC]"); //подумать над исключениями
+                currentEndDate = LocalDateTime.parse(scanner.nextLine().trim()+ "T00:00:00"); //подумать над исключениями
                 break;
 
             }catch (DateTimeParseException exception){

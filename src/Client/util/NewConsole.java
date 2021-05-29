@@ -6,6 +6,7 @@ import Common.data.Worker;
 import Common.exceptions.IncorrectArgumentException;
 import Common.exceptions.RecursionException;
 import Common.ResponseType;
+import Server.utilitka.CollectionManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,7 +33,7 @@ public class NewConsole {
 
 
     //Мы получаем результат сервера после ввода предыдущей команды и формируем новый запрос на сервер
-    public Request actMode() {
+    public Request actMode(User user) {
         String[] userCommand = {"", ""};
         CommandType inputType = null;
         ResponseType responseType = null;
@@ -66,7 +67,7 @@ public class NewConsole {
                     Creator creator = new Creator(scanner);
                     Instant instant = Instant.now();
                     return new Request(userCommand[0], userCommand[1], new Worker(0, creator.inputName(), creator.inputCoordinates(), Date.from(instant), creator.inputSalary(),
-                            creator.inputStartDate(), creator.inputEndDate(), creator.inputPosition(), creator.inputPerson()));
+                            creator.inputStartDate(), creator.inputEndDate(), creator.inputPosition(), creator.inputPerson(),user),user);
 
                 } else if (inputType == CommandType.SCRIPT) {
                     File file = new File(userCommand[1]);
@@ -95,7 +96,7 @@ public class NewConsole {
         }catch(NoSuchElementException exception){
             return new Request("exit","");
         }
-        return new Request(userCommand[0], userCommand[1]);
+        return new Request(userCommand[0], userCommand[1],user);
     }
 
 
@@ -141,7 +142,7 @@ public class NewConsole {
                     return CommandType.OBJECT;
                 case "remove_lower":
                     if (!userCommand[1].isEmpty()) throw new IncorrectArgumentException();
-                    return CommandType.OK;
+                    return CommandType.OBJECT;
                 case "count_less_than_position":
                     if (userCommand[1].isEmpty()) throw new IncorrectArgumentException();
                     return CommandType.OK;

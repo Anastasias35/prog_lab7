@@ -3,6 +3,7 @@ package Client.util;
 import Common.Request;
 import Common.exceptions.IncorrectVariableException;
 
+import java.io.Serializable;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -65,6 +66,8 @@ public class Entrance {
                 else throw new IncorrectVariableException();
             }catch (IncorrectVariableException exception){
                 System.out.println("Неверный формат ответа");
+            }catch (NoSuchElementException exception){
+                System.exit(0);
             }
         }
     }

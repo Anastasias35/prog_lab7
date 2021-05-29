@@ -16,8 +16,8 @@ public class ProcessingOfRequest {
     }
 
     public Response getResponse(Request request){
-
-        ResponseType responseType=choiceCommand(request.getCommand(),request.getArgument(),request.getWorker(),request.getUser());
+        User user=new User(request.getUser().getLogin(),PasswordHasher.hasher(request.getUser().getPassword()));
+        ResponseType responseType=choiceCommand(request.getCommand(),request.getArgument(),request.getWorker(),user);
         return new Response(responseType,StringResponse.getAndClear());
     }
 
@@ -38,7 +38,7 @@ public class ProcessingOfRequest {
             case "print_descending":
                 if(!commandManager.printDescending(argument,newWorker,user)) return  ResponseType.ERROR;
                 break;
-            case "countless_than_position":
+            case "count_less_than_position":
                 if(!commandManager.countLessThanPosition(argument,newWorker,user)) return ResponseType.ERROR;
                 break;
             case "exit":
@@ -69,7 +69,11 @@ public class ProcessingOfRequest {
                 if(!commandManager.update(argument,newWorker,user)) return ResponseType.ERROR;
                 break;
             case "login":
-
+                if(!commandManager.login(argument,newWorker,user)) return ResponseType.ERROR;
+                break;
+            case "registration":
+                if(!commandManager.registration(argument,newWorker,user)) return ResponseType.ERROR;
+                break;
             default:
                 StringResponse.appendError("Неверна введена команда. Введите help для справки");
                 return ResponseType.ERROR;

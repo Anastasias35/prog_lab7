@@ -1,6 +1,8 @@
 package Client;
 
+import Client.util.Entrance;
 import Client.util.NewConsole;
+import Client.util.User;
 import Common.Request;
 import Common.exceptions.ConnectionErrorException;
 import Common.Response;
@@ -11,6 +13,7 @@ import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.NoSuchElementException;
 
 public class Client {
     private String host;
@@ -21,14 +24,17 @@ public class Client {
     private boolean run;
     private final int maxconnect=5;
     private SocketChannel socketChannel;
+    private Entrance entrance;
+    private User user;
   //  private ObjectOutputStream objectOutputStream;
 
 
 
-    public Client(String host, int port, NewConsole console){
+    public Client(String host, int port, NewConsole console, Entrance entrance){
         this.host=host;
         this.port=port;
         this.console=console;
+        this.entrance=entrance;
     }
 
 
@@ -56,12 +62,15 @@ public class Client {
          while(run){
             try {
                 connect();
-                run = sendToServer();
+                processAuthentication();
+                run = sendToServer(user);
             } catch (ConnectionErrorException e) {
                 if(reconnecting>=maxconnect){
                     System.out.println("Превышено максимальное количество попыток подключения");
                     System.exit(0);
                 }
+            } catch (NoSuchElementException exception){
+                System.exit(0);
             }
             reconnecting++;
 
@@ -72,13 +81,13 @@ public class Client {
 
 
     //отправка запроса на сервер и получение ответа
-    public boolean sendToServer() throws ConnectionErrorException {
+    public boolean sendToServer(User user) throws ConnectionErrorException {
         ByteBuffer byteBuffer=ByteBuffer.allocate(65536);
         Request requestToServer = null;
         Response responseFromServer = null;
         do {
             try {
-                requestToServer= console.actMode();
+                requestToServer= console.actMode(user);
                 if (!requestToServer.isEmpty()) {
                     byteBuffer.clear();
                     byteBuffer.put(serialization(requestToServer));
@@ -101,6 +110,38 @@ public class Client {
             }
         } while (!responseFromServer.getResponseType().equals(ResponseType.EXIT));
         return  false;
+    }
+
+
+    public void processAuthentication() throws ConnectionErrorException{
+        ByteBuffer byteBuffer=ByteBuffer.allocate(65536);
+        Request request=null;
+        Response response=null;
+        do{
+            try{
+                request=entrance.createLoginRequest();
+                if (!request.isEmpty()) {
+                    byteBuffer.clear();
+                    //обрывается здесь
+                    byteBuffer.put(serialization(request));
+                    byteBuffer.flip();
+                    socketChannel.write(byteBuffer);
+                    byteBuffer.clear();
+                    socketChannel.read(byteBuffer);
+                    response = deserialization(byteBuffer.array());
+                    System.out.println(response.getInf());
+                }
+            } catch (ClassCastException exception) {
+                System.out.println("Соединение с сервером прервано ");
+                reconnecting++;
+                connect();
+                throw new ConnectionErrorException();
+            } catch (ClassNotFoundException exception){
+                System.out.println("Произошла ошибка при чтении данных");
+            }catch (IOException exception) {
+            }
+        }while(response==null || !response.getResponseType().equals(ResponseType.OK));
+         user=request.getUser();
     }
 
 

@@ -23,7 +23,7 @@ public class LoginCommand  extends AbstractCommand{
         try {
             if (!argument.isEmpty() || worker != null) throw new IncorrectArgumentException();
             if (dataBaseUserManager.checkUser(user)) {
-                System.out.println("Пользователь успешно авторизован");
+                StringResponse.appendln("Пользователь успешно авторизован");
                 return true;
             } else throw new InvalidUsersDataException();
         }catch (IncorrectArgumentException exception) {
@@ -31,7 +31,8 @@ public class LoginCommand  extends AbstractCommand{
         }catch (InvalidUsersDataException exception){
             StringResponse.appendError("Неверно введен логин или пароль");
         }catch (SQLException exception){
-            System.out.println("У этой команды может быть лишь аргумент 'User'");
+            exception.printStackTrace();
+            StringResponse.appendError("Ошибка при обработке запроса в базе данных");
         }
         return  false;
     }

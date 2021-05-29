@@ -5,6 +5,7 @@ import Common.data.Worker;
 import Common.exceptions.EmptyCollection;
 import Common.exceptions.IncorrectArgumentException;
 import Server.utilitka.CollectionManager;
+import Server.utilitka.DataBaseCollectionManager;
 import Server.utilitka.StringResponse;
 
 
@@ -16,10 +17,12 @@ public class PrintDescendingCommand extends AbstractCommand {
     private String name;
     private String description;
     private CollectionManager collectionManager;
+    private DataBaseCollectionManager dataBaseCollectionManager;
 
-    public PrintDescendingCommand(CollectionManager collectionManager){
+    public PrintDescendingCommand(CollectionManager collectionManager,DataBaseCollectionManager dataBaseCollectionManager){
         super("print_descending", "вывести элементы коллекции в порядке убывания");
         this.collectionManager=collectionManager;
+        this.dataBaseCollectionManager=dataBaseCollectionManager;
     }
 
     /**
