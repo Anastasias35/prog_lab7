@@ -44,7 +44,7 @@ public class DataBaseHandler {
             System.out.println("Введите логин:");
             this.login=scanner.nextLine().trim();
             System.out.println("Введите пароль:");
-            this.password="sad876";
+            this.password=scanner.nextLine().trim();
             try { ;
                 Class.forName("org.postgresql.Driver");
                 connection= DriverManager.getConnection(url,login,password);
