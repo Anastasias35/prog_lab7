@@ -1,5 +1,6 @@
 package Server.utilitka;
 
+import java.io.Console;
 import java.sql.*;
 import java.util.Scanner;
 
@@ -39,12 +40,13 @@ public class DataBaseHandler {
 
     public void connectWithDataBase(){
         Scanner scanner=new Scanner(System.in);
+        Console console = System.console();
         System.out.println("Подключение к базе данных");
         while(true) {
             System.out.println("Введите логин:");
             this.login=scanner.nextLine().trim();
             System.out.println("Введите пароль:");
-            this.password="sad876";
+            this.password=String.valueOf(console.readLine());
             try { ;
                 Class.forName("org.postgresql.Driver");
                 connection= DriverManager.getConnection(url,login,password);

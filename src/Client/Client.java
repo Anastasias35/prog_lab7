@@ -26,7 +26,6 @@ public class Client {
     private SocketChannel socketChannel;
     private Entrance entrance;
     private User user;
-  //  private ObjectOutputStream objectOutputStream;
 
 
 
@@ -56,7 +55,6 @@ public class Client {
         }while(!connection);
     }
 
-    //доработать
     public void work() {
         run=true;
          while(run){
@@ -69,8 +67,6 @@ public class Client {
                     System.out.println("Превышено максимальное количество попыток подключения");
                     System.exit(0);
                 }
-            } catch (NoSuchElementException exception){
-                System.exit(0);
             }
             reconnecting++;
 
@@ -98,8 +94,8 @@ public class Client {
                     responseFromServer = deserialization(byteBuffer.array());
                     System.out.println(responseFromServer.getInf());
                 }
-
-            }catch (ClassNotFoundException e) {
+            }
+            catch (ClassNotFoundException e) {
                 System.out.println("Призошла ошибка при чтении данных");
             }catch(ClassCastException exception){
                 System.out.println("Соединение с сервером прервано");

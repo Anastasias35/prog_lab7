@@ -32,6 +32,5 @@ public class Main {
             ProcessingOfRequest processingOfRequest=new ProcessingOfRequest(commandManager);
             Server server = new Server(1616,processingOfRequest);
             server.work();
-
         }
 }

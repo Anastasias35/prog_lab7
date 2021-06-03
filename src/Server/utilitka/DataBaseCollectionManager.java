@@ -6,6 +6,7 @@ import Common.data.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -64,23 +65,32 @@ public class DataBaseCollectionManager {
 
 
     public Worker getWorker(ResultSet resultSet) throws SQLException{
-        Long id=resultSet.getLong(DataBaseHandler.WORKER_ID_COLUMN);
-        String name=resultSet.getString(DataBaseHandler.WORKER_NAME_COLUMN);
-        Integer coordinatesX=resultSet.getInt(DataBaseHandler.WORKER_X_COLUMN); //поменять местами
-        Double coordinatesY=resultSet.getDouble(DataBaseHandler.WORKER_Y_COLUMN);
-        Coordinates coordinates=new Coordinates(coordinatesX,coordinatesY);
-        Instant instant=Instant.now();
-        Long salary=resultSet.getLong(DataBaseHandler.WORKER_SALARY_COLUMN);
-        LocalDateTime startDate=LocalDateTime.parse(resultSet.getString(DataBaseHandler.WORKER_STARTDATE_COLUMN));
-        LocalDateTime endDate=LocalDateTime.parse(resultSet.getString(DataBaseHandler.WORKER_ENDDATE_COLUMN));
-        Position position=Position.valueOf(resultSet.getString(DataBaseHandler.WORKER_POSITION_COLUMN));
-        Double weight=resultSet.getDouble(DataBaseHandler.WORKER_WEIGHT_COLUMN);
-        Color eyeColor= Color.valueOf(resultSet.getString(DataBaseHandler.WORKER_EYECOLOR_COLUMN));
-        Color hairColor=Color.valueOf(resultSet.getString(DataBaseHandler.WORKER_HAIRCOLOR_COLUMN));
-        Country nationality=Country.valueOf(resultSet.getString(DataBaseHandler.WORKER_NATIONALITY_COLUMN));
-        Person person=new Person(weight,eyeColor,hairColor,nationality);
-        User user=dataBaseUserManager.getUserById(resultSet.getLong(DataBaseHandler.WORKER_USER_ID_COLUMN));
-        return new Worker(id,name,coordinates,Date.from(instant),salary,startDate,endDate, position,person,user);
+        try {
+            Long id = resultSet.getLong(DataBaseHandler.WORKER_ID_COLUMN);
+            String name = resultSet.getString(DataBaseHandler.WORKER_NAME_COLUMN);
+            if (name.isEmpty()) throw new NullPointerException();
+            Integer coordinatesX = resultSet.getInt(DataBaseHandler.WORKER_X_COLUMN);
+            if (coordinatesX == null) throw new NullPointerException();
+            Double coordinatesY = resultSet.getDouble(DataBaseHandler.WORKER_Y_COLUMN);
+            if (coordinatesY == null) throw new NullPointerException();
+            Coordinates coordinates = new Coordinates(coordinatesX, coordinatesY);
+            Instant instant = Instant.now();
+            Long salary = resultSet.getLong(DataBaseHandler.WORKER_SALARY_COLUMN);
+            LocalDateTime startDate = LocalDateTime.parse(resultSet.getString(DataBaseHandler.WORKER_STARTDATE_COLUMN));
+            LocalDateTime endDate = LocalDateTime.parse(resultSet.getString(DataBaseHandler.WORKER_ENDDATE_COLUMN));
+            Position position = Position.valueOf(resultSet.getString(DataBaseHandler.WORKER_POSITION_COLUMN));
+            Double weight = resultSet.getDouble(DataBaseHandler.WORKER_WEIGHT_COLUMN);
+            Color eyeColor = Color.valueOf(resultSet.getString(DataBaseHandler.WORKER_EYECOLOR_COLUMN));
+            Color hairColor = Color.valueOf(resultSet.getString(DataBaseHandler.WORKER_HAIRCOLOR_COLUMN));
+            Country nationality = Country.valueOf(resultSet.getString(DataBaseHandler.WORKER_NATIONALITY_COLUMN));
+            if (nationality==null) throw new NullPointerException();
+            Person person = new Person(weight, eyeColor, hairColor, nationality);
+            User user = dataBaseUserManager.getUserById(resultSet.getLong(DataBaseHandler.WORKER_USER_ID_COLUMN));
+            return new Worker(id,name,coordinates,Date.from(instant),salary,startDate,endDate, position,person,user);
+        }catch (NullPointerException exception){
+            return null;
+        }
+
 
     }
 
@@ -90,7 +100,10 @@ public class DataBaseCollectionManager {
         preparedStatement=dataBaseHandler.getPreparedStatement(ALL_WORKER_REQUEST,false);
         ResultSet resultSet=preparedStatement.executeQuery();
         while(resultSet.next()){
-            workerLinkedHashSet.add(getWorker(resultSet));
+            Worker worker=getWorker(resultSet);
+            if (worker!=null) {
+                workerLinkedHashSet.add(getWorker(resultSet));
+            }
         }
         return workerLinkedHashSet;
     }
@@ -120,12 +133,10 @@ public class DataBaseCollectionManager {
     }
 
     public void deleteWorker(User user) throws SQLException{
-      //  System.out.println(user.getLogin());
         PreparedStatement preparedStatement;
         preparedStatement=dataBaseHandler.getPreparedStatement(DataBaseCollectionManager.DELETE_WORKER_BY_USER_ID_REQUEST, false);
         preparedStatement.setLong(1,dataBaseUserManager.getIdByLogin(user));
         preparedStatement.executeUpdate();
-       // System.out.println("sss");
     }
 
 

@@ -15,15 +15,11 @@ import java.time.Instant;
 import java.util.*;
 //Класс, работающий с консолью
 
-
-//пока без обработки скрипта!!!!!!!!!!
 public class NewConsole {
     private Creator creator;
     private Scanner scanner;
     private Stack<Scanner> scannerStack = new Stack<>();
     private ArrayList<String> scriptName = new ArrayList<>();
-//    private ArrayList<Scanner> scriptScanner=new ArrayList<>();
-//    private ArrayList<Request > scriptName=new ArrayList<>();
 
 
     public NewConsole(Scanner scanner, Creator creator) {
@@ -94,7 +90,7 @@ public class NewConsole {
             }
             scriptName.clear();
         }catch(NoSuchElementException exception){
-            return new Request("exit","");
+            return new Request("exit","",user);
         }
         return new Request(userCommand[0], userCommand[1],user);
     }
@@ -104,7 +100,6 @@ public class NewConsole {
     public CommandType choiceCommand(String[] userCommand) {
         try {
             switch (userCommand[0]) {
-
                 case "":
                     return CommandType.ERROR;
                 case "help":
@@ -159,34 +154,6 @@ public class NewConsole {
             }
         } catch (IncorrectArgumentException e) {
             return CommandType.OK;
-        }
-    }
-
-    public void actScript(String file) {
-        String[] userCommand1 = {"", ""};
-        scriptName.add(file);
-        File file1 = new File(file);
-        try (Scanner scanner1 = new Scanner(file1)) {
-            if (!scanner1.hasNext()) throw new NoSuchElementException();
-            scannerStack.push(scanner1);
-            do {
-
-                if (userCommand1[0].equals("execute_script")) {
-                    for (String name : scriptName) {
-                        if (userCommand1[1].equals(name)) {
-                            throw new RecursionException();
-                        }
-                    }
-                }
-            } while (scanner1.hasNextLine());
-            creator.setScanner(scannerStack.pop());
-        } catch (FileNotFoundException exception) {
-            if (!file1.canRead() & file1.exists()) System.out.println("Нет прав на чтение файла");
-            else System.out.println("Файл с таким  именем не найден");
-        } catch (NoSuchElementException exception) {
-            System.out.println("Файл пуст");
-        } catch (RecursionException exception) {
-            System.out.println("Скрипты не могут вызываться рекурсивно");
         }
     }
 }

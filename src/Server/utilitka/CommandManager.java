@@ -6,6 +6,8 @@ import Server.commands.AbstractCommand;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 // запуск команд
 
@@ -36,6 +38,7 @@ public class CommandManager {
     private AbstractCommand executeScriptCommand;
     private AbstractCommand loginCommand;
     private AbstractCommand registrationCommand;
+    private ReadWriteLock collectionlock=new ReentrantReadWriteLock();
 
     public CommandManager(AbstractCommand helpCommand,AbstractCommand infoCommand,AbstractCommand exitCommand, AbstractCommand showCommand,AbstractCommand clearCommand,
                           AbstractCommand addCommand,AbstractCommand removeByIdCommand, AbstractCommand printFieldAscendingSalaryCommand,
@@ -105,7 +108,12 @@ public class CommandManager {
      * @return состояние работы коллекции
      */
     public boolean info(String argument, Worker worker,User user){
-        return infoCommand.execute(argument,worker,user);
+        collectionlock.readLock().lock();
+        try{
+            return infoCommand.execute(argument,worker,user);
+        }finally {
+            collectionlock.readLock().unlock();
+        }
     }
 
     /**
@@ -123,7 +131,12 @@ public class CommandManager {
      * @return состояние работы программы
      */
     public boolean clear(String argument, Worker worker,User user){
-        return  clearCommand.execute(argument,worker,user);
+        collectionlock.writeLock().lock();
+        try {
+            return clearCommand.execute(argument, worker, user);
+        }finally {
+            collectionlock.writeLock().unlock();
+        }
     }
 
     /**
@@ -132,7 +145,12 @@ public class CommandManager {
      * @return состояние работы программы
      */
     public boolean add(String argument, Worker worker,User user){
-        return addCommand.execute(argument,worker,user);
+        collectionlock.writeLock().lock();
+        try {
+            return addCommand.execute(argument, worker, user);
+        }finally {
+            collectionlock.writeLock().unlock();
+        }
     }
 
     /**
@@ -141,7 +159,12 @@ public class CommandManager {
      * @return состояние работы команды
      */
     public boolean removeById(String argument, Worker worker,User user){
-        return removeByIdCommand.execute(argument,worker,user);
+        collectionlock.writeLock().lock();
+        try {
+            return removeByIdCommand.execute(argument, worker, user);
+        }finally {
+            collectionlock.writeLock().unlock();
+        }
     }
 
     /**
@@ -150,7 +173,12 @@ public class CommandManager {
      * @return состояние работы программы
      */
     public boolean show(String argument,Worker worker,User user){
-        return showCommand.execute(argument,worker,user);
+        collectionlock.readLock().lock();
+        try {
+            return showCommand.execute(argument, worker, user);
+        }finally {
+            collectionlock.readLock().unlock();
+        }
     }
 
     /**
@@ -159,7 +187,12 @@ public class CommandManager {
      * @return состояние работы программы
      */
     public boolean countLessThanPosition(String argument, Worker worker,User user){
-        return  countLessThanPositionCommand.execute(argument,worker,user);
+        collectionlock.readLock().lock();
+        try {
+            return countLessThanPositionCommand.execute(argument, worker, user);
+        }finally {
+            collectionlock.readLock().unlock();
+        }
     }
 
     /**
@@ -168,7 +201,12 @@ public class CommandManager {
      * @return состояние работы команды
      */
     public boolean printFieldAscendingSalary(String argument, Worker worker,User user){
-        return printFieldAscendingSalaryCommand.execute(argument,worker,user);
+        collectionlock.readLock().lock();
+        try {
+            return printFieldAscendingSalaryCommand.execute(argument, worker, user);
+        }finally {
+            collectionlock.readLock().unlock();
+        }
     }
 
     /**
@@ -177,7 +215,12 @@ public class CommandManager {
      * @return состояние работы программы
      */
     public boolean update(String argument, Worker worker,User user){
-        return updateCommand.execute(argument,worker,user);
+        collectionlock.writeLock().lock();
+        try {
+            return updateCommand.execute(argument, worker, user);
+        }finally {
+            collectionlock.writeLock().unlock();
+        }
     }
 
     /**
@@ -186,7 +229,12 @@ public class CommandManager {
      * @return состояние работы программы
      */
     public boolean addIfMax(String argument, Worker worker,User user){
-        return addIfMaxCommand.execute(argument, worker,user);
+        collectionlock.writeLock().lock();
+        try {
+            return addIfMaxCommand.execute(argument, worker, user);
+        }finally {
+            collectionlock.writeLock().unlock();
+        }
     }
 
     /**
@@ -195,7 +243,12 @@ public class CommandManager {
      * @return состояние работы программы
      */
     public boolean addIfMin(String argument, Worker worker,User user) {
-        return addIfMinCommand.execute(argument, worker,user);
+        collectionlock.writeLock().lock();
+        try {
+            return addIfMinCommand.execute(argument, worker, user);
+        }finally {
+            collectionlock.writeLock().unlock();
+        }
     }
 
     /**
@@ -204,7 +257,12 @@ public class CommandManager {
      * @return состояние работы программы
      */
     public boolean removeLower(String argument, Worker worker,User user){
-        return removeLowerCommand.execute(argument,worker,user);
+        collectionlock.writeLock().lock();
+        try {
+            return removeLowerCommand.execute(argument, worker, user);
+        }finally {
+            collectionlock.writeLock().unlock();
+        }
     }
 
     /*public boolean executeScript(String argument) {
@@ -219,7 +277,12 @@ public class CommandManager {
      * @return состояние работы программы
      */
     public boolean printDescending(String argument,Worker worker,User user) {
-        return printDescendingCommand.execute(argument,worker,user);
+        collectionlock.readLock().lock();
+        try {
+            return printDescendingCommand.execute(argument, worker, user);
+        }finally {
+            collectionlock.readLock().unlock();
+        }
     }
 
     /**
