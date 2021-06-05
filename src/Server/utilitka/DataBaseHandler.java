@@ -53,10 +53,11 @@ public class DataBaseHandler {
                 System.out.println("Соединение установлено");
                 break;
             } catch (ClassNotFoundException exception) {
-                System.out.println("Неверно введен логин или пароль");
-            } catch (SQLException exception) {
                 System.out.println("Драйвер не найден");
                 System.exit(0);
+            } catch (SQLException exception) {
+                System.out.println("Неверно введен логин или пароль");
+
             }
         }
     }

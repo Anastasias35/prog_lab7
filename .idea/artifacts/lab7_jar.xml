@@ -4,6 +4,7 @@
     <root id="archive" name="lab7.jar">
       <element id="module-output" name="lab7" />
       <element id="extracted-dir" path="$USER_HOME$/Downloads/postgresql-42.2.20.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Studying/postgresql-42.2.20.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
