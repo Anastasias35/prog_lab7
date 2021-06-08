@@ -97,7 +97,7 @@ public class DataBaseCollectionManager {
     public LinkedHashSet<Worker> getWorkerFromDataBase() throws SQLException {
         LinkedHashSet<Worker> workerLinkedHashSet=new LinkedHashSet<Worker>();
         PreparedStatement preparedStatement;
-        preparedStatement=dataBaseHandler.getPreparedStatement(ALL_WORKER_REQUEST,false);
+        preparedStatement=dataBaseHandler.getPreparedStatement(ALL_WORKER_REQUEST);
         ResultSet resultSet=preparedStatement.executeQuery();
         while(resultSet.next()){
             Worker worker=getWorker(resultSet);
@@ -110,7 +110,7 @@ public class DataBaseCollectionManager {
 
     public boolean addWorker(Worker worker,User user) throws SQLException{
         PreparedStatement preparedStatement;
-        preparedStatement=dataBaseHandler.getPreparedStatement(ADD_NEW_WORKER_REQUEST,true);
+        preparedStatement=dataBaseHandler.getPreparedStatement(ADD_NEW_WORKER_REQUEST);
         preparedStatement.setString(1,worker.getName());
         preparedStatement.setLong(2,worker.getCoordinates().getX());
         preparedStatement.setDouble(3,worker.getCoordinates().getY());
@@ -134,7 +134,7 @@ public class DataBaseCollectionManager {
 
     public void deleteWorker(User user) throws SQLException{
         PreparedStatement preparedStatement;
-        preparedStatement=dataBaseHandler.getPreparedStatement(DataBaseCollectionManager.DELETE_WORKER_BY_USER_ID_REQUEST, false);
+        preparedStatement=dataBaseHandler.getPreparedStatement(DataBaseCollectionManager.DELETE_WORKER_BY_USER_ID_REQUEST);
         preparedStatement.setLong(1,dataBaseUserManager.getIdByLogin(user));
         preparedStatement.executeUpdate();
     }
@@ -147,7 +147,7 @@ public class DataBaseCollectionManager {
     }
 
     public boolean checkWorker(Long id,User user) throws SQLException{
-        PreparedStatement preparedStatement=dataBaseHandler.getPreparedStatement(CHECK_WORKER_ID_BY_USER_ID_REQUEST,false);
+        PreparedStatement preparedStatement=dataBaseHandler.getPreparedStatement(CHECK_WORKER_ID_BY_USER_ID_REQUEST);
         preparedStatement.setLong(1,id);
         preparedStatement.setLong(2,dataBaseUserManager.getIdByLogin(user));
         ResultSet resultSet=preparedStatement.executeQuery();
@@ -160,14 +160,14 @@ public class DataBaseCollectionManager {
 
 
     public void deleteWorkerByUserIdAndIdRequest(Worker worker,User user) throws SQLException{
-        PreparedStatement preparedStatement=dataBaseHandler.getPreparedStatement(DELETE_WORKER_BY_USER_ID_AND_ID_REQUEST,false);
+        PreparedStatement preparedStatement=dataBaseHandler.getPreparedStatement(DELETE_WORKER_BY_USER_ID_AND_ID_REQUEST);
         preparedStatement.setLong(1,worker.getId());
         preparedStatement.setLong(2,dataBaseUserManager.getIdByLogin(user));
         preparedStatement.executeUpdate();
     }
 
     public void updateWorkerById(Worker worker,Long  id) throws  SQLException{
-        PreparedStatement preparedStatement=dataBaseHandler.getPreparedStatement(UPDATE_WORKER_BY_ID,false);
+        PreparedStatement preparedStatement=dataBaseHandler.getPreparedStatement(UPDATE_WORKER_BY_ID);
         preparedStatement.setString(1,worker.getName());
         preparedStatement.setLong(2,worker.getCoordinates().getX());
         preparedStatement.setDouble(3,worker.getCoordinates().getY());

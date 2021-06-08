@@ -40,16 +40,16 @@ public class DataBaseHandler {
 
     public void connectWithDataBase(){
         Scanner scanner=new Scanner(System.in);
-        Console console = System.console();
+   //     Console console = System.console();
         System.out.println("Подключение к базе данных");
         while(true) {
             System.out.println("Введите логин:");
             this.login=scanner.nextLine().trim();
             System.out.println("Введите пароль:");
-            this.password=String.valueOf(console.readPassword());
+        //    this.password=String.valueOf(console.readPassword());
             try { ;
                 Class.forName("org.postgresql.Driver");
-                connection= DriverManager.getConnection(url,login,password);
+                connection= DriverManager.getConnection(url,login,"sad876");
                 System.out.println("Соединение установлено");
                 break;
             } catch (ClassNotFoundException exception) {
@@ -63,12 +63,11 @@ public class DataBaseHandler {
     }
 
 
-    public PreparedStatement getPreparedStatement(String request,boolean key) throws  SQLException{
+    public PreparedStatement getPreparedStatement(String request) throws  SQLException{
         PreparedStatement preparedStatement=null;
         try{
             if(connection==null) throw new SQLException();
-            int generateKeys=key? Statement.RETURN_GENERATED_KEYS:Statement.NO_GENERATED_KEYS;
-            preparedStatement=connection.prepareStatement(request,generateKeys);
+            preparedStatement=connection.prepareStatement(request);
             return preparedStatement;
         }catch(SQLException exception){
             if(connection==null) System.out.println("Соединение не установлено");
