@@ -28,7 +28,7 @@ public class DataBaseUserManager {
     public User getUserById(Long id) throws SQLException{
         PreparedStatement preparedStatement;
         User user=null;
-        preparedStatement=dataBaseHandler.getPreparedStatement(GET_USER_BY_ID,false);
+        preparedStatement=dataBaseHandler.getPreparedStatement(GET_USER_BY_ID);
         preparedStatement.setLong(1,id);
         ResultSet resultSet=preparedStatement.executeQuery();
         if (resultSet.next()) {
@@ -40,7 +40,7 @@ public class DataBaseUserManager {
 
     public boolean checkUser(User user) throws SQLException{
         PreparedStatement preparedStatement;
-        preparedStatement=dataBaseHandler.getPreparedStatement(CHECK_USER_PASSWORD_AND_LOGIN,false);
+        preparedStatement=dataBaseHandler.getPreparedStatement(CHECK_USER_PASSWORD_AND_LOGIN);
         preparedStatement.setString(1,user.getLogin());
         preparedStatement.setString(2,user.getPassword());
         ResultSet resultSet= preparedStatement.executeQuery();
@@ -50,7 +50,7 @@ public class DataBaseUserManager {
     public Long getIdByLogin(User user) throws SQLException{
         PreparedStatement preparedStatement;
         Long id=-1l;
-        preparedStatement=dataBaseHandler.getPreparedStatement(GET_ID_BY_LOGIN,false);
+        preparedStatement=dataBaseHandler.getPreparedStatement(GET_ID_BY_LOGIN);
         preparedStatement.setString(1,user.getLogin());
         ResultSet resultSet=preparedStatement.executeQuery();
         if (resultSet.next()){
@@ -65,7 +65,7 @@ public class DataBaseUserManager {
         PreparedStatement preparedStatement;
         if (getIdByLogin(user) !=-1) return false;
         else {
-            preparedStatement = dataBaseHandler.getPreparedStatement(INSERT_NEW_USER, false);
+            preparedStatement = dataBaseHandler.getPreparedStatement(INSERT_NEW_USER);
             preparedStatement.setString(1, user.getLogin());
             preparedStatement.setString(2, user.getPassword());
             if (preparedStatement.executeUpdate() ==0) throw new SQLException();
